@@ -387,6 +387,24 @@ mrb_serial_set_write_timeout(mrb_state *mrb, mrb_value self)
   return mrb_fixnum_value(time);
 }
 
+#if defined(_WIN32) || defined(_WIN64)
+static mrb_value
+mrb_serial_sysread(mrb_state *mrb, mrb_value self)
+{
+  extern mrb_value mrb_serial_sysread_impl(mrb_state*, mrb_value);
+printf("%s: %s\n", __FILE__, __FUNCTION__);
+  return mrb_serial_sysread_impl(mrb, self);
+}
+
+static mrb_value
+mrb_serial_syswrite(mrb_state *mrb, mrb_value self)
+{
+  extern mrb_value mrb_serial_syswrite_impl(mrb_state*, mrb_value);
+printf("%s: %s\n", __FILE__, __FUNCTION__);
+  return mrb_serial_syswrite_impl(mrb, self);
+}
+#endif /* _WIN32, _WIN64 */
+
 void
 mrb_mruby_serialport_gem_init(mrb_state *mrb)
 {
@@ -410,6 +428,10 @@ mrb_mruby_serialport_gem_init(mrb_state *mrb)
   sym_ri  = mrb_intern_lit(mrb, "ri");
 
   mrb_define_method(mrb, serialport_class, "create_port", mrb_serial_create_port, MRB_ARGS_REQ(1));
+#if defined(_WIN32) || defined(_WIN64)
+  mrb_define_method(mrb, serialport_class, "sysread",     mrb_serial_sysread,     MRB_ARGS_ANY());
+  mrb_define_method(mrb, serialport_class, "syswrite",    mrb_serial_syswrite,    MRB_ARGS_REQ(1));
+#endif
 
   mrb_define_method(mrb, serialport_class, "break",            mrb_serial_break,             MRB_ARGS_REQ(1));
   mrb_define_method(mrb, serialport_class, "dtr=",             mrb_serial_set_dtr,           MRB_ARGS_REQ(1));

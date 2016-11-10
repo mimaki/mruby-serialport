@@ -21,7 +21,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-
+#if !defined(_WIN32) && !defined(_WIN64)
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -468,4 +468,4 @@ mrb_serial_set_signals_impl(mrb_state *mrb, mrb_value self, struct line_signals_
    mrb_raise(mrb, E_IO_ERROR, "TIOCMSET");
  }
 }
-
+#endif /* _WIN32,_WIN64 */

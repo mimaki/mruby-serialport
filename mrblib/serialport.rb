@@ -6,6 +6,7 @@ class SerialPort
     super(fileno, "r+");
 
     begin
+p "params=#{params}"
       set_modem_params(*params)
     rescue
       close
