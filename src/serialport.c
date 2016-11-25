@@ -392,7 +392,7 @@ static mrb_value
 mrb_serial_sysread(mrb_state *mrb, mrb_value self)
 {
   extern mrb_value mrb_serial_sysread_impl(mrb_state*, mrb_value);
-printf("%s: %s\n", __FILE__, __FUNCTION__);
+//printf("%s: %s\n", __FILE__, __FUNCTION__);
   return mrb_serial_sysread_impl(mrb, self);
 }
 
@@ -400,7 +400,7 @@ static mrb_value
 mrb_serial_syswrite(mrb_state *mrb, mrb_value self)
 {
   extern mrb_value mrb_serial_syswrite_impl(mrb_state*, mrb_value);
-printf("%s: %s\n", __FILE__, __FUNCTION__);
+// printf("%s: %s\n", __FILE__, __FUNCTION__);
   return mrb_serial_syswrite_impl(mrb, self);
 }
 #endif /* _WIN32, _WIN64 */

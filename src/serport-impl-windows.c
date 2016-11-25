@@ -42,8 +42,6 @@ mrb_int mrb_serial_create_port_impl(mrb_state *mrb, mrb_value self)
   mrb_int fileno;
   HANDLE hComm;
 
-printf("%s start\n", __FUNCTION__);
-
   mrb_get_args(mrb, "o", &val);
 
   vtype = mrb_type(val);
@@ -85,11 +83,6 @@ printf("%s start\n", __FUNCTION__);
       CloseHandle(hComm);
       mrb_raise(mrb, E_ARGUMENT_ERROR, "not a serial port");
     }
-printf("COMMTIMEOUTS.ReadIntervalTimeout        =%ld\n", cto.ReadIntervalTimeout);
-printf("COMMTIMEOUTS.ReadTotalTimeoutMultiplier =%ld\n", cto.ReadTotalTimeoutMultiplier);
-printf("COMMTIMEOUTS.ReadTotalTimeoutConstant   =%ld\n", cto.ReadTotalTimeoutConstant);
-printf("COMMTIMEOUTS.WriteTotalTimeoutMultiplier=%ld\n", cto.WriteTotalTimeoutMultiplier);
-printf("COMMTIMEOUTS.WriteTotalTimeoutConstant  =%ld\n", cto.WriteTotalTimeoutConstant);
     cto.ReadIntervalTimeout = 50; /* 50ms */
     SetCommTimeouts(hComm, &cto);
 
@@ -121,7 +114,6 @@ printf("COMMTIMEOUTS.WriteTotalTimeoutConstant  =%ld\n", cto.WriteTotalTimeoutCo
     fileno = -1;
   }
 
-printf("%s end. fileno=%d\n", __FUNCTION__, fileno);
   return fileno;
 }
 
@@ -129,7 +121,6 @@ printf("%s end. fileno=%d\n", __FUNCTION__, fileno);
 static int
 get_fd_helper(mrb_state *mrb, mrb_value self)
 {
-printf("%s start\n", __FUNCTION__);
   return mrb_fixnum(mrb_funcall(mrb, self, "fileno", 0));
 }
 
@@ -139,7 +130,6 @@ static inline void
 serial_tcgetattr(mrb_state *mrb, mrb_value self, struct termios *params)
 {
   int fd;
-printf("%s start\n", __FUNCTION__);
 
   fd = get_fd_helper(mrb, self);
 //   if (tcgetattr(fd, params) == -1) {
@@ -149,14 +139,12 @@ printf("%s start\n", __FUNCTION__);
   if (!GetCommState((HANDLE)fd, params)) {
     mrb_raise(mrb, E_IO_ERROR, "GetCommState failed.");
   }
-printf("%s end\n", __FUNCTION__);
 }
 
 static inline void
 serial_tcsetattr(mrb_state *mrb, mrb_value self, struct termios *params)
 {
   int fd;
-printf("%s start\n", __FUNCTION__);
 
   fd = get_fd_helper(mrb, self);
 //   if (tcsetattr(fd, TCSANOW, params) == -1) {
@@ -166,14 +154,12 @@ printf("%s start\n", __FUNCTION__);
   if (!SetCommState((HANDLE)fd, params)) {
     mrb_raise(mrb, E_IO_ERROR, "SetCommState failed.");
   }
-printf("%s end\n", __FUNCTION__);
 }
 
 static inline int
 serial_convert_baud_rate(mrb_state *mrb, struct modem_params_t *modem_params)
 {
 //   int baud_rate;
-printf("%s start\n", __FUNCTION__);
 
 //   switch(modem_params->baud_rate) {
 //   case     50: baud_rate =     B50; break;
@@ -216,7 +202,6 @@ printf("%s start\n", __FUNCTION__);
 void
 mrb_serial_break_impl(mrb_state *mrb, mrb_value self, mrb_int time)
 {
-printf("%s start\n", __FUNCTION__);
   mrb_raise(mrb, E_IO_ERROR, "mrb_serial_break_impl");
 //   int fd;
 //   fd = get_fd_helper(mrb, self);
@@ -231,7 +216,6 @@ mrb_serial_flow_control_impl(mrb_state *mrb, mrb_value self)
 {
 //   struct termios params;
   mrb_int result = 0;
-printf("%s start\n", __FUNCTION__);
   mrb_raise(mrb, E_IO_ERROR, "mrb_serial_flow_control_impl");
 
 //   serial_tcgetattr(mrb, self, &params);
@@ -250,7 +234,6 @@ printf("%s start\n", __FUNCTION__);
 void
 mrb_serial_set_flow_control_impl(mrb_state *mrb, mrb_value self, mrb_int flow_control)
 {
-printf("%s start\n", __FUNCTION__);
   mrb_raise(mrb, E_IO_ERROR, "mrb_serial_set_flow_control_impl");
 //   struct termios params;
 
@@ -276,7 +259,6 @@ printf("%s start\n", __FUNCTION__);
 mrb_value
 mrb_read_timeout_impl(mrb_state *mrb, mrb_value self)
 {
-printf("%s start\n", __FUNCTION__);
   mrb_raise(mrb, E_IO_ERROR, "mrb_read_timeout_impl");
 //   mrb_value result;
 //   struct termios params;
@@ -302,7 +284,6 @@ printf("%s start\n", __FUNCTION__);
 void
 mrb_set_read_timeout_impl(mrb_state *mrb, mrb_value self, mrb_int timeout)
 {
-printf("%s start\n", __FUNCTION__);
   mrb_raise(mrb, E_IO_ERROR, "mrb_set_read_timeout_impl");
 //   struct termios params;
 
@@ -327,7 +308,6 @@ printf("%s start\n", __FUNCTION__);
 mrb_int
 mrb_write_timeout_impl(mrb_state *mrb, mrb_value self)
 {
-printf("%s start\n", __FUNCTION__);
   mrb_raise(mrb, E_IO_ERROR, "mrb_write_timeout_impl");
 //   int fd;
 //   fd = get_fd_helper(mrb, self);
@@ -340,7 +320,6 @@ printf("%s start\n", __FUNCTION__);
 void
 mrb_set_write_timeout_impl(mrb_state *mrb, mrb_value self, mrb_int time)
 {
-printf("%s start\n", __FUNCTION__);
   mrb_raise(mrb, E_IO_ERROR, "mrb_set_write_timeout_impl");
 //   int fd;
 //   fd = get_fd_helper(mrb, self);
@@ -352,7 +331,6 @@ void
 mrb_serial_get_modem_params_impl(mrb_state *mrb, mrb_value self, struct modem_params_t *modem_params)
 {
   struct termios params;
-printf("%s start\n", __FUNCTION__);
 
   serial_tcgetattr(mrb, self, &params);
 
@@ -386,7 +364,6 @@ printf("%s start\n", __FUNCTION__);
 // #endif
 //   }
   modem_params->baud_rate = params.BaudRate;
-printf("baud_rate=%d\n", modem_params->baud_rate);
 
 //   switch(params.c_cflag & CSIZE) {
 //   case CS5:
@@ -406,7 +383,6 @@ printf("baud_rate=%d\n", modem_params->baud_rate);
 //     break;
 //   }
   modem_params->data_bits = params.ByteSize;
-printf("data_bits=%d\n", modem_params->data_bits);
 
 //   modem_params->stop_bits = (params.c_cflag & CSTOPB ? 2 : 1);
   switch (params.ByteSize) {
@@ -418,7 +394,6 @@ printf("data_bits=%d\n", modem_params->data_bits);
     modem_params->stop_bits = 2;
     break;
   }  
-printf("stop_bits=%d\n", modem_params->stop_bits);
 
 //   if (!(params.c_cflag & PARENB)) {
 //     modem_params->parity = MRBGEM_SERIALPORT_NONE;
@@ -430,14 +405,11 @@ printf("stop_bits=%d\n", modem_params->stop_bits);
 //     modem_params->parity = MRBGEM_SERIALPORT_EVEN;
 //   }
   modem_params->parity = params.Parity;
-printf("parity=%d\n", modem_params->parity);
-printf("%s end\n", __FUNCTION__);
 }
 
 void
 mrb_serial_get_signals_impl(mrb_state *mrb, mrb_value self, struct line_signals_t *signals)
 {
-printf("%s start\n", __FUNCTION__);
   mrb_raise(mrb, E_IO_ERROR, "mrb_serial_get_signals_impl");
 //   int fd;
 //   int line_status;
@@ -462,11 +434,9 @@ mrb_serial_set_modem_params_impl(mrb_state *mrb, mrb_value self, struct modem_pa
   struct termios params;
   // int baud_rate;
 //   int data_bits[] = { CS5, CS6, CS7, CS8 };
-printf("%s start\n", __FUNCTION__);
 
   serial_tcgetattr(mrb, self, &params);
 
-printf("baud_rate=%d\n", modem_params->baud_rate);
 //   baud_rate = serial_convert_baud_rate(mrb, modem_params);
 //   cfsetispeed(&params, baud_rate);
 //   cfsetospeed(&params, baud_rate);
@@ -479,10 +449,8 @@ printf("baud_rate=%d\n", modem_params->baud_rate);
 
 //   params.c_cflag &= ~CSIZE;
 //   params.c_cflag |= data_bits[modem_params->data_bits - 5];
-printf("data_bits=%d\n", modem_params->data_bits);
   params.ByteSize = modem_params->data_bits;
 
-printf("stop_bits=%d\n", modem_params->stop_bits);
   switch(modem_params->stop_bits) {
   case 1:
 //     params.c_cflag &= ~CSTOPB;
@@ -497,7 +465,6 @@ printf("stop_bits=%d\n", modem_params->stop_bits);
     break;
   }
 
-printf("parity=%d\n", modem_params->parity);
   switch(modem_params->parity) {
   case MRBGEM_SERIALPORT_EVEN:
   //   params.c_cflag |= PARENB;
@@ -520,14 +487,12 @@ printf("parity=%d\n", modem_params->parity);
   params.Parity = modem_params->parity;
 
   serial_tcsetattr(mrb, self, &params);
-printf("%s end\n", __FUNCTION__);
 }
 
 
 void
 mrb_serial_set_signals_impl(mrb_state *mrb, mrb_value self, struct line_signals_t *signals)
 {
-printf("%s start\n", __FUNCTION__);
   mrb_raise(mrb, E_IO_ERROR, "mrb_serial_set_signals_impl");
 //   int fd, line_status;
 
@@ -577,7 +542,6 @@ mrb_serial_sysread_impl(mrb_state *mrb, mrb_value self)
 // #else
   DWORD ret;
 // #endif
-printf("%s: %s\n", __FILE__, __FUNCTION__);
 
   mrb_get_args(mrb, "i|S", &maxlen, &buf);
   if (maxlen < 0) {
@@ -595,7 +559,6 @@ printf("%s: %s\n", __FILE__, __FUNCTION__);
 // #ifndef _USE_WINAPI /* POSIX */
 //   ret = read(fptr->fd, RSTRING_PTR(buf), maxlen);
 // #else /* WinAPI */
-// printf("%s fd=%d, buflen=%d\n", __FUNCTION__, fptr->fd, maxlen);
   if (!ReadFile((HANDLE)fptr->fd, RSTRING_PTR(buf), maxlen, &ret, NULL)) {
     mrb_sys_fail(mrb, "sysread failed");
   }
